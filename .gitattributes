@@ -1,0 +1,4 @@
+# Byte contract: no end-of-line conversion on any platform, so sha256 of a checked-out file equals the sha256 in manifest.json
+# (a Windows clone with core.autocrlf=true would otherwise rewrite LF to CRLF and every hash would differ).
+* -text
+*.ots binary

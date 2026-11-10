@@ -1,0 +1,91 @@
+e1dfca56d917dc047459a083f461f376f3601054252cb4e1688e24a129174e13  docs/structure_chart_forward_prereg.md
+# frozen 2026-10-21 before T0; doc committed in 3abe68a (verify: git show 3abe68a:docs/structure_chart_forward_prereg.md | sha256sum)
+# cell T0 (structure.db meta chart_T0_<cell> = t0 of the first judge-predicate row; read 2026-10-27 mode=ro): chart_T0_zone 1792843200
+#   (2026-10-24T12:00:00Z, BTC 4h, logged 16:01:31Z); chart_T0_cme 1792965600 (2026-10-25T22:00:00Z, binance BTC 1h, weekend 2026-10-23, logged
+#   2026-10-26T00:01:20Z); chart_T0_wedge 1793008800 (2026-10-26T10:00:00Z, SOL 1h falling_wedge, logged 11:02:09Z); chart_T0_fvg: none yet
+#   (36 fvg rows, 0 judge rows). Deploy markers chart_deploy_<cell>_<tf> (set by the 2026-10-24 12:00Z reboot deploy): zone/fvg/wedge_4h 1792828800
+#   (08:00Z), zone/fvg/wedge_1h and cme_1h 1792839600 (11:00Z), zone/fvg/wedge_1d 1792713600 (2026-10-23T00:00:00Z).
+# ledger: research.db trials family=structure_chart_fwd_v1 dataset=gate_binance_structure_fwd_2026-10-21 (registered 2026-10-21, N 58->60 together with structure_wave_fwd_v1)
+# P1 rules (2026-10-24, additive — the frozen .md is unchanged; this block replaces the 2026-10-21 P1 draft note). The judgement report applies:
+#   rows: chart_log is first-log-only (UNIQUE event_family|exchange|symbol|tf|event_key, INSERT OR IGNORE). Registered by views AND the in-process
+#     hourly job (logged_by 'api'|'job') over recent windows: zone H bars, fvg h2 bars, wedge 48 bars, cme every weekend >= marker. Events already older
+#     than the window at first registration are missed and must be counted as '등록 누락'. Only the 3-symbol pool (BTC/ETH/SOL USDT perps) is registered.
+#   exchanges: zone/fvg/wedge rows = gateio only; cme rows = binance (the population) whatever exchange was viewed — one row per (symbol, Friday).
+#   deploy marker meta.chart_deploy_<cell>_<tf>, set once at the first registration attempt: zone/fvg/wedge = that frame's latest closed bar;
+#     cme = latest closed 1h bar by the request clock (never the population's last bar). Events with t0 < marker are never registered.
+#     A stored marker that is not a canonical integer stops registration (fail-closed, never replaced).
+#   judge predicate stored per row (chart_log.judge): zone tf 4h; fvg tf 4h AND union bucket 0.5-1.0; cme |gap| >= 0.5% AND direction up|down;
+#     wedge kind rising|falling (1h S, 4h M, 1d M pooled). Weekends excluded by the holidays file at registration are not registered at all.
+#   cell T0: chart_T0_<cell> = t0 of the FIRST judge row (set once); chart_T0_<cell>_any = first row of the family. Judgement population = judge
+#     rows with t0 >= chart_T0_<cell>; judge rows with marker <= t0 < T0 are reported as excluded.
+#   cme: t0 = start of the Sunday 17:00 CT 1h bar, outcome window 118 bars from t0. Rows come only from a validated population (>= 95% of 18000 bars
+#     unless history-limited, reached the present, not the 1000-bar fallback, latest closed bar <= 1 bar late at load) that is still fresh at
+#     registration (latest closed bar at most 2 bars behind the clock's latest closed 1h bar), and only while docs/cme_holidays.json loads and validates:
+#     shape (excluded_weekends year -> parseable dates, _coverage covering marker date .. today), content (every date a Friday, inside its year key,
+#     holidays[].weekend_fri Fridays, excluded_weekends == union of holidays[].weekend_fri with exclude_weekend true), no duplicate JSON keys (a UTF-8 BOM
+#     is accepted). An unreadable or invalid current file withholds registration even if an older copy is in memory (rows register late once fixed —
+#     every weekend >= marker is offered on every pass). At judgement the report re-applies cme_holidays.json as of judgement with its _changelog (frozen
+#     §2.3 allows official CME notices): rows whose Friday is excluded then are dropped and reported; chart_T0_cme stays as recorded. p_placebo /
+#     p_ref_weekday are as-of values frozen in each row: rows registered while the file differed from the judgement-time file keep them unrepaired and
+#     are counted as such in the report.
+#   fvg: rows registered only after the union is final — (n-1) - last_bar_idx >= merge_bars (3), merge chained from the union's last merged gap
+#     ('3봉 이내' counted from the last gap); logged_late_bars >= 3 by design.
+#   y_i: recomputed at judgement from raw closed bars fetched with the v2 loader (src/data.py fmt 2 — truncated tips dropped and refetched): Gate for
+#     zone/fvg/wedge, Binance for cme. Stored *_at_log fields (outcomes/status/fill_pct/breakout/touches) are registration-time snapshots for audit —
+#     never split or judge on them; zone touches_t / members_t = members confirmed by the approach bar.
+#   quality gate: frames that fail it write no rows (1000-bar fallback, pagination not reaching the present, latest closed bar > 1 bar late,
+#     zero-volume flat among the last 3 closed bars or at a re-fetched page junction, a missing bar among the last 3, a re-fetched page-junction bar
+#     absent from the response — added 2026-10-27, R5-DL-L1). Other zero-volume flats and other missing bars are reported as warnings only (R4-DL-M1).
+#     While structure.db is locked at the deploy-marker read, the view/job withholds its write (counted as a log failure) and retries.
+#   panel cutoffs (no running readout): only the judge statistic is frozen at the deploy marker — FVG judge cell (0.5-1.0 x h2 x far, 4h), CME judge
+#     row (0.5%+ x 118) AND its exact partition (0.5-1% / 1-2% / 2%+ x 118, whose sum would reveal the forward k/n), pooled wedge cell + rising/falling
+#     rows, 4h pooled zone rows; events with t0 >= marker are excluded and only their count is shown. If the markers cannot be read (lock/IO) the judge
+#     rows are withheld (fail-closed — never computed uncut) and that payload is not cached; markers once read are kept in process memory; a failed
+#     read is not retried for 5 s (requests stay withheld meanwhile). Stored markers must be canonical integers in [0, now + 1 day] (else withheld).
+#     Other cells/buckets/H keep updating as descriptive rows (frozen §2 '나머지 셀·버킷·H 는 전부 서술'); 4h FVG non-judge cells (and their open-gap
+#     history copies), triangle rows (n_forward_included = post-marker registered patterns, n_forward_included_resolved = of those resolved) and CME
+#     non-judge rows carry n_forward_included ('배포 이후 n건 포함(서술)'). Per-zone k/n are descriptive (§2.1 '층별 k/n 은 표시만').
+#     KNOWN LIMITATION (corrected 2026-10-27 after the 4th review — the earlier 'no exact recovery path' claim was false): the panel seals the
+#     COMPUTED judge statistic only, not the data. Displays the frozen text itself mandates or allows keep showing forward events: per-zone approaches
+#     k/n and last_side/last_outcome (§2.1 '층별 k/n 은 표시만') — differenced across views they recover the zone judge cell's forward held/broke
+#     exactly; the current / last-completed CME weekend record (outcomes, as-of p_ref_weekday) — polled weekly it recovers the CME judge k/n and Δ̄;
+#     patterns.recent (last 3 resolved patterns with breakout direction) and the drawn breakouts (§3 '그림 불변'); and descriptive rows nested with a
+#     judge cell (FVG bucket 0.5-1.0 at h1 far / h1 half / h2 half, CME 0.5%+ at other hold lengths) bound it; gaps.fvg.open and the drawn FVG
+#     boxes (§3 '그림(박스·선·층) 불변'): a post-marker 0.5-1.0 ATR box that leaves the open list within 42 bars is a far fill, so polled per bar
+#     they recover the FVG judge k near-exactly (5th review: 103/106 on GBM — the 6-per-side cap and union re-bucketing can drop a box). Raw candles
+#     plus the public algorithm
+#     determine every outcome anyway. So the no-interim-look rule binds the analyst (no forward p̂/CI/Δ̄ is computed or shown, no stopping or
+#     reparametrisation on what is seen), not the visibility of single events. Open owner decision: whether to blind any of these displays further.
+#     DECISION (2026-11-03, owner): NO further blinding. Rationale: (i) the judge statistic is computed mechanically from the sealed predicate
+#     behind the deploy markers, so seeing single events cannot change k/n; (ii) the product intent is that any viewer sees the current structures
+#     on the chart together with their historical frequencies (n_eff + CI + base rate) — hiding events would remove the product; (iii) external
+#     credibility is to rest on a timestamped publication of the frozen-spec hash plus predicted-vs-realised (calibration) reporting at judgement
+#     time, not on hiding events. Re-open only if the forward record is to be presented as an event-level blind trial.
+#   panel zone chip: shows an outcome-blind LOWER BOUND of the zone judge n_eff — non-overlapping fixed windows [t0, t0 + 12 bars] per (symbol, side)
+#     over matured 4h judge rows with t0 >= chart_T0_zone (since 2026-10-27; rows with marker <= t0 < chart_T0 are not eligible and not counted).
+#     LB <= the frozen n_eff holds because every §2.1 window [approach bar, resolution bar or approach bar + H] is contained in its fixed window
+#     (about 2-2.5x below the true n_eff on GBM and real Gate 4h data); it is NOT the trigger.
+#   trigger date (frozen §3 'n_eff >= 100(해소·성숙 사건; 층 셀은 §2.1 의 비중첩 창 수) 또는 셀 T0 + 12개월 중 먼저', §1 '성숙: 판정 시점에 사건 창(H)이
+#     이미 지난 것만'; corrected 2026-10-27 by the 5th review — the 4th-review wording dropped unresolved rows from the zone count, which frozen §2.1
+#     does not allow): n_eff-eligible rows = judge rows with t0 >= chart_T0_<cell>, logged_at <= D, MATURED by D (zone: 4h judge window t0 + 13 bars
+#     closed; wedge: window min(apex, t0 + 3L) closed; FVG: t0 + 43 bars; CME: t0 + 118 bars). n_eff = zone: frozen §2.1 non-overlapping windows
+#     [approach bar, resolution bar] per (symbol, side), unresolved rows as [approach bar, approach bar + H = 12 bars] (= src.structure_layers._pool
+#     over the matured rows), start > previous end, summed over the 3 symbols; wedge: matured rows resolved up or down (expired excluded); FVG/CME:
+#     matured rows (a non-fill / non-reversion is outcome 0 under frozen §2.2/§2.3, not 'unresolved'). The judgement report reconstructs D = the
+#     first bar close at which that n_eff reaches 100, or chart_T0_<cell> + 12 months if earlier, from chart_log + raw v2 bars as a COUNT ONLY before
+#     any y_i is evaluated. Judged set = the eligible rows at D minus zone/wedge rows unresolved/expired at maturity (reported as such). This clarifies
+#     frozen §1/§3; it does not change them. Panel counts are not the trigger: n_judge_matured_by_cell counts rows that are only time-matured
+#     (resolution not checked) and also rows with marker <= t0 < chart_T0; zone LB >= 100 implies D has passed (LB <= n_eff over the same eligible
+#     rows; the report still fixes D exactly), LB < 100 says nothing about D (the true n_eff runs 2-2.5x above the LB).
+#   raw-bar retention (probed 2026-10-24 by the 4th review, rr4 gate_retention.py up to 500 days back: 1h ≈ 416 days measured; 4h ≈ 4.5 years is
+#     inferred from the same 10000-candle cap, not probed): Gate serves only the latest 10000 candles per interval.
+#     The wedge pool includes 1h rows, so its report (y_i, RW p_ref, D) must run before the earliest 1h judge row's t0 + ~400 days, unless closed pool
+#     bars are archived first (archive job: open item in research_agenda §36). Binance (CME) and Gate 4h/1d are not affected within the 12-month horizon.
+# FVG status_at_log: 'half' uses the same midpoint comparison as the half outcome since 2026-10-24 (was fill_pct >= 0.5; differs only on exact float touches).
+# 2026-11-03 A 27-cell job (additive — the frozen .md is unchanged). From this change the in-process hourly job also computes binance and bybit cells
+#   (3 exchanges x BTC/ETH/SOL x 1h/4h/1d = 27 cells, gateio cells always first) to fill the 60 s response cache, the weekly RW controls and the closed-bar
+#   archive (ohlcv_archive.db, exchange column). Those cells, and any binance/bybit view, register NOTHING in the pre-registered record: no wave_log row,
+#   no chart_log zone/fvg/wedge row, no deploy marker, no cell T0 (server_api _WAVE_LOG_EXCHANGE = _CHART_LOG_EXCHANGE = 'gateio'; the wave gate is new —
+#   before it only the symbol pool was checked; 0 non-gate rows ever existed). cme rows stay the binance population registered by any pass (INSERT OR
+#   IGNORE, idempotent across exchanges). ops/verify_structure_deploy.py now FAILs on any wave_log row with exchange != gateio, any non-cme chart_log row
+#   with exchange != gateio and any cme row with exchange != binance.

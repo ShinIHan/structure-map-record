@@ -1,0 +1,6 @@
+# Public record repository. Nothing sensitive is ever placed here; the sync tool stages explicit paths only.
+# Deliberately NO rule for data/, *.db, *.json or *.jsonl: the record lives in data/forward/.
+*.tmp
+*.bak
+__pycache__/
+*.pyc

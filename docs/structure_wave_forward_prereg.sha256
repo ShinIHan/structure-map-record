@@ -1,0 +1,31 @@
+c7ccf43babd3a6231a5706ff27cc9a7e7516b181527e953829f04227f5fb947b  docs/structure_wave_forward_prereg.md
+# frozen 2026-10-21 before T0; doc committed in 3abe68a (verify: git show 3abe68a:docs/structure_wave_forward_prereg.md | sha256sum)
+# wave_T0 = 1792555200  (bar_ts of first live wave_log row: gateio BTC/USDT:USDT 4h bar 2026-10-21 04:00 UTC; logged_at 1792570904 = 2026-10-21 08:21:44 UTC by dashboard PID 2180, structure_version structure_v1)
+# ledger: research.db trials family=structure_wave_fwd_v1 dataset=gate_structure_fwd_2026-10-21 (registered 2026-10-21, N 58->60 together with structure_chart_fwd_v1)
+# 2026-10-24 I-2026-10-24-01 (data integrity; additive — frozen .md unchanged). OPERATIONAL DECISION, not pre-authorised by the frozen text:
+#   frozen §4 makes a data-integrity failure a kill condition ('판정불가'), and §3-4 ('데이터 공백 … 공백 비율 보고') concerns missing bars inside
+#   resolution windows — neither covers corrupt log rows. Fact: 8 of the first 11 wave_log rows had a close different from the exchange's final close
+#   (truncated last candles of v1 pagination / in-progress snapshots promoted from the 1 h pickle); the 3 1d rows' frames held a fake bar too.
+#   Rule (mechanical, outcome-blind): every row with logged_at < meta.loader_v2_live_ts (first start of the fixed loader, set once) is listed in
+#   wave_log_quarantine and treated as NOT LOGGED — the frozen data model already allows missing rows (view-dependent logging, §6). Quarantined rows are
+#   excluded from scoring and churn; wave_log itself is untouched (first-log-only). Hypothesis, constants and event definitions are unchanged;
+#   wave_T0 stays 1792555200 (12-month deadline unchanged).
+#   Re-basing: an id whose first record is quarantined is scored from its first non-quarantined row (new t0 and that row's inv/target/close/p_ref);
+#   the report gives n_rebased and the max lag in bars (server _wave_scored exposes both). Under the RW null this is unbiased because scoring restarts
+#   at the new t0 with that row's own inv/target/p_ref (Markov property); the selection rule itself ignores outcomes.
+#   No 4h event could mature before ~2026-11-07, but resolutions before maturity (target/invalidation touched in the first bars) may have been visible on
+#   the chart when the rule was fixed — neutrality rests only on the rule ignoring outcomes. Any residual integrity failure found at judgement still
+#   means 판정불가 (frozen §4).
+# P1b hourly job (logged_by 'job', in-process thread in the SYSTEM dashboard, polls every 60 s, logs each new closed bar 75 s after close):
+#   live from 2026-10-24T12:00:08Z (meta.job_live_ts, read from the live structure.db on 2026-10-27; dashboard process started 2026-10-24T12:00:01Z
+#   = meta.loader_v2_live_ts); meta.job_live_ts = logged_at of the first wave_log row the job actually INSERTED (set once — a job attempt on a bar a
+#   view already logged does not set it). Rows are written only for the 3-symbol pool (BTC/ETH/SOL USDT perps), only after the quarantine migration
+#   succeeded (otherwise the write is withheld and retried), never while structure.db is locked at the deploy-marker read (withheld, counted as a log
+#   failure, retried by the next view/job poll), and only from frames that pass the quality gate (not the 1000-bar fallback, reached the present, latest
+#   closed bar <= 1 bar late, no zero-volume flat among the last 3 closed bars or at a re-fetched page junction, no missing bar among the last 3, no
+#   re-fetched page-junction bar absent from the response — R5-DL-L1 2026-10-27; other flats / other missing bars are warnings only).
+# 2026-11-03 A 27-cell job (additive — frozen .md unchanged): wave_log rows are gateio-only by the new exchange gate in server_api._forward_log_append
+#   (_WAVE_LOG_EXCHANGE = 'gateio'; applies to views and to the hourly job alike). The job now also runs binance/bybit cells (27 cells, gateio first) for
+#   the display cache, the weekly RW controls and the closed-bar archive; those cells write no wave_log row and never set wave_T0 / wave_T0_meta /
+#   job_live_ts (their status is read-only: wave.skipped_kind 'exchange', counted neither as a log failure nor in cells_logged). Before this change the
+#   pool check alone would have let a binance view write an exchange=binance row (none ever did). Verify FAILs on COUNT(wave_log WHERE exchange != 'gateio') > 0.

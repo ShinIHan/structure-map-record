@@ -1,0 +1,5 @@
+# SSH public keys allowed to sign the commits of this repository (format: ssh-keygen(1) ALLOWED SIGNERS).
+# Check a commit:  git -c gpg.ssh.allowedSignersFile=allowed_signers verify-commit HEAD
+# A rotated key stays listed: old commits must keep verifying.
+# Line format: <principal> <key type> <key>, for example  12345+name@users.noreply.github.com ssh-ed25519 AAAAC3Nza...
+89966726+ShinIHan@users.noreply.github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE2Uw5APEWeX7PFzhoiC64CFMWY/OBoAIj+ZBBgBBq20
