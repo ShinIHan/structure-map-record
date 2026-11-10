@@ -73,9 +73,9 @@
       "sha256": "28aa2e234636d34b948ad9535baaf2c96a531e030c8be4eb4e5671ce23c81774"
     },
     "chart_log_2026-11.jsonl": {
-      "bytes": 2164867,
-      "rows": 1133,
-      "sha256": "58a0d1ed05aba6cef72d235dadd601838805d44ce704a6847d50b875aba5a27e"
+      "bytes": 2265632,
+      "rows": 1189,
+      "sha256": "313cc4aceca1f3b9e50be2b3c6eafd874259c4e3100421724dd407e623615670"
     },
     "meta.json": {
       "bytes": 2222,
@@ -93,9 +93,9 @@
       "sha256": "39d2527a1e34a4628966fcfc47a9ca838e2f821b5bbc5af066272f40aa72c751"
     },
     "wave_log_2026-11.jsonl": {
-      "bytes": 3467254,
-      "rows": 876,
-      "sha256": "731e21e4c5fc6442255b5065338cb9912e8f1a019b0edbd9f790c7ee6923f75c"
+      "bytes": 3554683,
+      "rows": 897,
+      "sha256": "cb3c8e0942e037ae7ca464f447bf00203228f6859feb928b554d10ca1e1ad3bf"
     },
     "wave_log_quarantine.jsonl": {
       "bytes": 8560,
@@ -107,28 +107,28 @@
     "chart_log": 0,
     "wave_log": 0
   },
-  "generated_at_utc": "2026-11-10T08:01:33Z",
+  "generated_at_utc": "2026-11-10T14:50:00Z",
   "late_rows": {
     "chart_log": 0,
     "wave_log": 0
   },
   "late_threshold_s": 300,
   "max_id": {
-    "chart_log": 52663,
-    "wave_log": 1681,
+    "chart_log": 53901,
+    "wave_log": 1720,
     "wave_log_quarantine": 11
   },
   "new_rows": {
-    "chart_log": 1976,
-    "wave_log": 1586,
-    "wave_log_quarantine": 11
+    "chart_log": 56,
+    "wave_log": 21,
+    "wave_log_quarantine": 0
   },
-  "prev_generated_at_utc": null,
-  "prev_manifest_sha256": null,
+  "prev_generated_at_utc": "2026-11-10T08:01:33Z",
+  "prev_manifest_sha256": "3432316df6224c829d8325c59f457b0d8e48c8449183c0589686d6ceafa44538",
   "row_counts": {
-    "chart_log": 1976,
+    "chart_log": 2032,
     "meta": 26,
-    "wave_log": 1586,
+    "wave_log": 1607,
     "wave_log_quarantine": 11
   },
   "schema": 1,
