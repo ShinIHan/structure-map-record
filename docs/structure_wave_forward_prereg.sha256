@@ -29,3 +29,46 @@ c7ccf43babd3a6231a5706ff27cc9a7e7516b181527e953829f04227f5fb947b  docs/structure
 #   the display cache, the weekly RW controls and the closed-bar archive; those cells write no wave_log row and never set wave_T0 / wave_T0_meta /
 #   job_live_ts (their status is read-only: wave.skipped_kind 'exchange', counted neither as a log failure nor in cells_logged). Before this change the
 #   pool check alone would have let a binance view write an exchange=binance row (none ever did). Verify FAILs on COUNT(wave_log WHERE exchange != 'gateio') > 0.
+# 2026-11-11 §3-3 SCORER CORRECTION, I-2026-11-10-01 (additive — frozen .md unchanged). Type: implementation defect — the frozen text states the
+#   condition, the scorer omitted it. Found 2026-11-10 by the P1 case-tracker design review (frozen text read against server_api._wave_scored).
+#   Decided 2026-11-11 by the owner on the engineering recommendation. No target-first / invalidation-first comparison was made for any event;
+#   the rule is mechanical and follows the frozen text, so its neutrality does not rest on blindness: the live scorer has counted the one
+#   affected event (below) in the panel's BTC 1h n_scored since it matured (about 2026-11-02), and the chart shows the bars after every t0.
+#   Frozen §3-3 defines a valid event as 'd_inv > 0, d_tgt > 0 (현재가가 두 가격 사이)' and lists '거리 ≤ 0' among the 채점 불가 cases, while §2
+#   stores d_inv and d_tgt as absolute distances; the scorer (it also feeds the §4 trigger count n_scored) checked only 'd > 0', so it admitted a
+#   t0 row whose target is already behind the close (or whose invalidation price is on the wrong side). Such an event resolves almost
+#   mechanically on the next bar (up: high >= target_price), and its p_ref = d_inv / (d_inv + d_tgt) is not the gambler's-ruin reference of §1,
+#   which presumes a start between the two barriers.
+#   Rule (mechanical; every exchange/symbol/tf): a t0 row is a valid event only if its close lies strictly between the two prices on the count's
+#   side — direction 'up': inv_price < close < target_price; 'down': target_price < close < inv_price — i.e. the §3-3 distances taken with the
+#   count's sign are both > 0. On every logged row this reading and the plain min < close < max reading agree. A failing row — exact equality
+#   (distance 0) included — is 채점 불가 in the frozen '거리 ≤ 0' class; the server reports every such row that has a finite close and meets the
+#   other §3-3 conditions as n_unscorable_not_between (inside n_unscorable). First record only (§3-2): an id whose first non-quarantined row
+#   fails is never scored from a later row. The same valid-event set feeds H2 (§3-8) and the §3-9 figures. wave_log rows keep their recorded
+#   p_ref (frozen §2 computes it whenever both absolute distances are > 0), so a non-null p_ref does not imply validity — this rule decides it.
+#   H2 touch side (same defect class, decided together): an alternative's invalidation touch is judged by the side of alt_inv_price relative to
+#   the t0 close (below: low <= alt_inv_price; above: high >= alt_inv_price); alt_inv_price == close, or an alternative without a finite
+#   alt_inv_price, excludes the event from H2 (counted). The top-1 invalidation always lies behind the close by construction, so this reproduces
+#   §3-4 for it. Second-ranked counts can be complete (their invalidation can then lie on the far side of the close for their own direction's
+#   touch rule, which would score an automatic touch) or point the other way (the top-1 direction's touch rule would mis-score them); the side
+#   rule handles both. So far, valid events whose alternative's invalidation lies on that far side: 1h 5 of 44 — all opposite-direction
+#   completed zigzags whose alt_inv_price equals the top-1 inv_price, so D_i = 0 by construction (the report states this tie count) — 4h 0 of
+#   11, 1d 0 of 2.
+#   Unchanged: hypothesis, constants (src/structure.py and src/possibility.py untouched), windows, p_ref formula, seed, trigger thresholds,
+#   wave_T0. Ledger: not a new trial (trials id 63 unchanged, N stays 60). The judgement report lists the failing events under §8 '거리 ≤ 0'
+#   with counts and ids, states the statistic under the pre-fix check as a non-confirmatory secondary analysis (identical whenever no judged
+#   event fails the rule), and runs only after the OpenTimestamps proof of this sidecar as of the commit adding this block is complete (a
+#   manual stamp of exactly those bytes; the proof, with the byte length and sha256 it covers, is kept in the private repository under
+#   docs/ots/ — the public record's nightly anchors cover the data files only, not this file). Enforced in the live server from the deploy
+#   recorded below; before it, the panel's BTC 1h n_scored included the affected event.
+#   Data available at the decision: single-event outcomes are visible on the chart by design (no event-level blinding — chart sidecar DECISION
+#   2026-11-03); no forward hit rate, Δ̄ or CI of this family has been computed (no judgement script exists; the server exposes counts only).
+#   Exposure (from each event's first non-quarantined wave_log row — entry-state columns; no OHLC frame loaded, no resolution computed; rows up
+#   to bar_ts 1794366000 = 2026-11-11T03:00:00Z): 4h pool 16 events, 11 valid under the old check, 0 fail the rule; 1h 64 events, 45
+#   old-valid, 1 fails — wave_log id 457, BTC/USDT:USDT 1h, bar_ts 1793235600, M:20261028T080000Z:zigzag:down:C (target 80340.7 above close
+#   79978.7); 1d 5 events, 2 old-valid, 0 fail. QC, old vs new scorer on the 9 gateio cells (only the counts the API already exposes; no
+#   first-touch side is output): identical everywhere except BTC 1h n_scored 11 -> 10 and n_unscorable 4 -> 5; the 4h cells have n_scored 0
+#   under both (no 4h event matured yet).
+# 2026-11-11 deploy (I-2026-11-10-01): main 42c34cd (scorer commit a46d67f) loaded by the dashboard restart at 14:38:38 KST
+#   (ops/restart_dashboard.bat, PID 22836 -> 17036); ops/verify_structure_deploy.py ALL PASS incl. 'forward_test.wave.n_unscorable_not_between';
+#   live BTC 1h now n_scored 10, n_unscorable 5 (1 not between). The rule is enforced in the live server from this restart.
