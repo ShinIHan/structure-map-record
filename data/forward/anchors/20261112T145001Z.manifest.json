@@ -1,0 +1,144 @@
+{
+  "columns": {
+    "chart_log": [
+      "id",
+      "event_family",
+      "exchange",
+      "symbol",
+      "tf",
+      "event_key",
+      "t0_bar_ts",
+      "payload_json",
+      "logged_at",
+      "logged_by",
+      "chart_version",
+      "structure_version",
+      "judge"
+    ],
+    "meta": [
+      "k",
+      "v"
+    ],
+    "wave_log": [
+      "id",
+      "exchange",
+      "symbol",
+      "tf",
+      "bar_ts",
+      "logged_at",
+      "logged_by",
+      "structure_version",
+      "close",
+      "atr_now",
+      "top1_id",
+      "top1_kind",
+      "top1_direction",
+      "top1_in_wave",
+      "top1_fit",
+      "top1_n_guidelines",
+      "top1_hard_pass",
+      "ambiguous",
+      "none_valid",
+      "n_valid",
+      "n_unverifiable",
+      "inv_price",
+      "target_label",
+      "target_price",
+      "d_inv",
+      "d_tgt",
+      "p_ref",
+      "alt_id",
+      "alt_inv_price",
+      "alt_fit",
+      "alternates_json",
+      "dow_state",
+      "dow_scale",
+      "eff_ratio",
+      "regime",
+      "grid_json",
+      "churn_30"
+    ],
+    "wave_log_quarantine": [
+      "wave_id",
+      "reason",
+      "evidence",
+      "quarantined_at"
+    ]
+  },
+  "date_utc": "2026-11-12",
+  "files": {
+    "chart_log_2026-10.jsonl": {
+      "bytes": 1669116,
+      "rows": 843,
+      "sha256": "28aa2e234636d34b948ad9535baaf2c96a531e030c8be4eb4e5671ce23c81774"
+    },
+    "chart_log_2026-11.jsonl": {
+      "bytes": 2670826,
+      "rows": 1417,
+      "sha256": "0b49e7b03fcea91b3d86637364322d8e2e7367217808aa14c12e56774fa09a36"
+    },
+    "meta.json": {
+      "bytes": 2222,
+      "rows": 26,
+      "sha256": "f763e4f81c20512404fa14a85692f49c2357d14369b3c99b1d278d57d8f6e274"
+    },
+    "schema.sql": {
+      "bytes": 1533,
+      "rows": 4,
+      "sha256": "bca797b30790519982e272e94e7f573afabe8e44982ea05d426d64829d8423b1"
+    },
+    "wave_log_2026-10.jsonl": {
+      "bytes": 2839312,
+      "rows": 710,
+      "sha256": "39d2527a1e34a4628966fcfc47a9ca838e2f821b5bbc5af066272f40aa72c751"
+    },
+    "wave_log_2026-11.jsonl": {
+      "bytes": 4313443,
+      "rows": 1083,
+      "sha256": "a4d1b532d9ef38072c2706057356eace3dd5576874e8151c3571ccc61b4e3886"
+    },
+    "wave_log_quarantine.jsonl": {
+      "bytes": 8560,
+      "rows": 11,
+      "sha256": "d7c619d347d7f1108b91ae2a2131c97d4a6a02e285e026e2bb51e11e15d9fe63"
+    }
+  },
+  "future_rows": {
+    "chart_log": 0,
+    "wave_log": 0
+  },
+  "generated_at_utc": "2026-11-12T14:50:01Z",
+  "late_rows": {
+    "chart_log": 0,
+    "wave_log": 0
+  },
+  "late_threshold_s": 300,
+  "max_id": {
+    "chart_log": 61301,
+    "wave_log": 1918,
+    "wave_log_quarantine": 11
+  },
+  "new_rows": {
+    "chart_log": 95,
+    "wave_log": 93,
+    "wave_log_quarantine": 0
+  },
+  "prev_generated_at_utc": "2026-11-11T14:50:01Z",
+  "prev_manifest_sha256": "d770957222a52d5df574156b76eeae552937a742b24508f2aa54c9aa41700e25",
+  "row_counts": {
+    "chart_log": 2260,
+    "meta": 26,
+    "wave_log": 1793,
+    "wave_log_quarantine": 11
+  },
+  "schema": 1,
+  "schema_change": null,
+  "schema_sql": {
+    "chart_log": "CREATE TABLE chart_log (\n        id INTEGER PRIMARY KEY AUTOINCREMENT,\n        event_family TEXT NOT NULL, exchange TEXT NOT NULL, symbol TEXT NOT NULL, tf TEXT NOT NULL, event_key TEXT NOT NULL,\n        t0_bar_ts INTEGER, payload_json TEXT NOT NULL,\n        logged_at INTEGER NOT NULL, logged_by TEXT NOT NULL, chart_version TEXT NOT NULL, structure_version TEXT NOT NULL,\n        judge INTEGER NOT NULL DEFAULT 0,\n        UNIQUE(event_family, exchange, symbol, tf, event_key))",
+    "meta": "CREATE TABLE meta (k TEXT PRIMARY KEY, v TEXT)",
+    "wave_log": "CREATE TABLE wave_log (\n        id INTEGER PRIMARY KEY AUTOINCREMENT,\n        exchange TEXT NOT NULL, symbol TEXT NOT NULL, tf TEXT NOT NULL, bar_ts INTEGER NOT NULL,\n        logged_at INTEGER NOT NULL, logged_by TEXT NOT NULL, structure_version TEXT NOT NULL,\n        close REAL, atr_now REAL,\n        top1_id TEXT, top1_kind TEXT, top1_direction TEXT, top1_in_wave TEXT, top1_fit REAL,\n        top1_n_guidelines INTEGER, top1_hard_pass TEXT,\n        ambiguous INTEGER, none_valid INTEGER, n_valid INTEGER, n_unverifiable INTEGER,\n        inv_price REAL, target_label TEXT, target_price REAL, d_inv REAL, d_tgt REAL, p_ref REAL,\n        alt_id TEXT, alt_inv_price REAL, alt_fit REAL, alternates_json TEXT,\n        dow_state TEXT, dow_scale TEXT, eff_ratio REAL, regime TEXT,\n        grid_json TEXT, churn_30 REAL,\n        UNIQUE(exchange, symbol, tf, bar_ts))",
+    "wave_log_quarantine": "CREATE TABLE wave_log_quarantine (\n        wave_id INTEGER PRIMARY KEY, reason TEXT NOT NULL, evidence TEXT, quarantined_at INTEGER NOT NULL)"
+  },
+  "source": "structure.db",
+  "tool_version": "1.0.0"
+}
