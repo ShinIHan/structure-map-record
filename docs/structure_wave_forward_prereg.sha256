@@ -72,3 +72,7 @@ c7ccf43babd3a6231a5706ff27cc9a7e7516b181527e953829f04227f5fb947b  docs/structure
 # 2026-11-11 deploy (I-2026-11-10-01): main 42c34cd (scorer commit a46d67f) loaded by the dashboard restart at 14:38:38 KST
 #   (ops/restart_dashboard.bat, PID 22836 -> 17036); ops/verify_structure_deploy.py ALL PASS incl. 'forward_test.wave.n_unscorable_not_between';
 #   live BTC 1h now n_scored 10, n_unscorable 5 (1 not between). The rule is enforced in the live server from this restart.
+# 2026-11-12 OTS (I-2026-11-10-01): the manual OpenTimestamps proof docs/ots/structure_wave_forward_prereg.sha256.2026-11-11.ots was
+#   upgraded and is complete: Bitcoin block header attestations at heights 975396, 975397, 975410 and 975429. It covers the first 9780
+#   bytes of this file (sha256 9ad5f91c639c2b1af8e32442802d6f4d777349d13c71abe9ee810e91bb1e6e36). The proof condition of the
+#   2026-11-11 block's report gate is met.
