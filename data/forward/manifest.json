@@ -65,7 +65,7 @@
       "quarantined_at"
     ]
   },
-  "date_utc": "2026-11-13",
+  "date_utc": "2026-11-14",
   "files": {
     "chart_log_2026-10.jsonl": {
       "bytes": 1669116,
@@ -73,9 +73,9 @@
       "sha256": "28aa2e234636d34b948ad9535baaf2c96a531e030c8be4eb4e5671ce23c81774"
     },
     "chart_log_2026-11.jsonl": {
-      "bytes": 2857013,
-      "rows": 1523,
-      "sha256": "294312f4130373cc31cb8342617183ae08c4fa2a158d6f3a24293a19d3acd4a2"
+      "bytes": 3112991,
+      "rows": 1660,
+      "sha256": "a50e73172f48afb7b1ce960139350f0ef376524ca403cf97866df321041d754a"
     },
     "meta.json": {
       "bytes": 2222,
@@ -93,9 +93,9 @@
       "sha256": "39d2527a1e34a4628966fcfc47a9ca838e2f821b5bbc5af066272f40aa72c751"
     },
     "wave_log_2026-11.jsonl": {
-      "bytes": 4689821,
-      "rows": 1176,
-      "sha256": "459d39a37ee27bf53f43473019c02d98f2adec7d90cf3b280ddb6873206d802a"
+      "bytes": 5072134,
+      "rows": 1269,
+      "sha256": "670b764d43278972e2bb3fb462238362c72929f314b03068de17b91dabafc1d1"
     },
     "wave_log_quarantine.jsonl": {
       "bytes": 8560,
@@ -107,28 +107,28 @@
     "chart_log": 0,
     "wave_log": 0
   },
-  "generated_at_utc": "2026-11-13T14:50:01Z",
+  "generated_at_utc": "2026-11-14T14:50:01Z",
   "late_rows": {
     "chart_log": 0,
     "wave_log": 0
   },
   "late_threshold_s": 300,
   "max_id": {
-    "chart_log": 64337,
-    "wave_log": 2011,
+    "chart_log": 68408,
+    "wave_log": 2104,
     "wave_log_quarantine": 11
   },
   "new_rows": {
-    "chart_log": 106,
+    "chart_log": 137,
     "wave_log": 93,
     "wave_log_quarantine": 0
   },
-  "prev_generated_at_utc": "2026-11-12T14:50:01Z",
-  "prev_manifest_sha256": "4c51196054086ef9d27e4a3d6c95dedc032a6bd03fee84c48467cb2d07d480e9",
+  "prev_generated_at_utc": "2026-11-13T14:50:01Z",
+  "prev_manifest_sha256": "e06672797dbd097b0eae7ffd745bcbea9561c77417b7fa989d4075ebaaac1091",
   "row_counts": {
-    "chart_log": 2366,
+    "chart_log": 2503,
     "meta": 26,
-    "wave_log": 1886,
+    "wave_log": 1979,
     "wave_log_quarantine": 11
   },
   "schema": 1,
