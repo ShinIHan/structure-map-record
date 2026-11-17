@@ -2,6 +2,31 @@
 
 *English first, 한국어는 아래.*
 
+## In short
+
+- **What it is.** A public notebook of predictions. A chart-structure model (wave counts, support and resistance zones,
+  gaps, wedges) watches BTC / ETH / SOL perpetual futures on Gate.io. Each time a bar closes, what the model said is
+  written down as one row.
+- **Why it exists.** So that nobody, the owner included, can change a prediction after the outcome is known. Rows are
+  only ever added: never edited, never deleted.
+- **How you can check.** Every snapshot carries the fingerprint (hash) of the one before it and is time-stamped on the
+  Bitcoin blockchain. One script checks the whole history on your own machine, without the network:
+
+  ```
+  git -c core.autocrlf=false clone https://github.com/ShinIHan/structure-map-record.git
+  cd structure-map-record
+  python verify_record.py --history
+  ```
+- **How it will be judged.** By rules that were written down and frozen before the record started (the two documents in
+  `docs/`).
+- **What it does not show.** Whether the model is any good: that is what the record is for. And the time stamps are
+  daily, so they cannot prove to the hour that a row was written before its outcome was knowable (see "Honest limits").
+- **It is not advice** to buy or sell anything.
+
+Everything below is the detailed description, for readers who want to verify the record themselves.
+
+## What the record is
+
 This repository is the public, tamper-evident copy of a **pre-registered forward record**: the predictions of a
 structure-map model (Elliott-style wave counts and chart structures: support/resistance zones, fair-value gaps, wedges,
 CME weekend gaps) for **BTC/ETH/SOL USDT perpetuals on Gate.io** (CME rows use Binance as the population). A prediction
@@ -181,6 +206,29 @@ them are claimed, and the licence covers only the rights the owner holds.
 ---
 
 # 구조 지도 전방 기록 (사전등록 · 추가만 가능 · 해시 체인)
+
+## 한눈에 보기
+
+- **무엇인가.** 예측을 적어 두는 공개 공책입니다. 차트 구조 모델(파동 세기, 지지 · 저항 구간, 갭, 쐐기)이 Gate.io 의
+  BTC · ETH · SOL 무기한 선물을 보고, 봉이 닫힐 때마다 "모델이 뭐라고 했는지"를 한 줄씩 적습니다.
+- **왜 만들었나.** 결과가 나온 뒤에 예측을 고치는 일을 누구도(만든 사람도) 못 하게 하려는 것입니다. 줄은 덧붙이기만 하고,
+  고치거나 지우지 않습니다.
+- **어떻게 확인하나.** 매일의 사본에는 바로 앞 사본의 지문(해시)이 들어 있고, 비트코인 블록체인에 시각 도장이 찍힙니다.
+  아래 명령으로 전체 이력을 내 컴퓨터에서, 인터넷 없이 검사할 수 있습니다.
+
+  ```
+  git -c core.autocrlf=false clone https://github.com/ShinIHan/structure-map-record.git
+  cd structure-map-record
+  python verify_record.py --history
+  ```
+- **어떻게 판정하나.** 기록을 시작하기 전에 적어서 고정해 둔 규칙(`docs/` 의 문서 둘)으로 판정합니다.
+- **보여 주지 못하는 것.** 모델이 좋은지는 아직 모릅니다. 그걸 가리려고 쌓는 기록입니다. 시각 도장은 하루 한 번이라, 어떤 줄이
+  결과를 알 수 있기 전에 적혔는지를 시간 단위로는 증명하지 못합니다(아래 '정직한 한계').
+- **투자 조언이 아닙니다.**
+
+아래는 직접 검증해 보려는 분을 위한 자세한 설명입니다.
+
+## 자세히
 
 이 저장소는 **사전등록된 전방 기록**의 공개 사본입니다. 구조 지도 모델(엘리엇식 파동 카운트와 차트 구조: 지지·저항 층, FVG,
 쐐기, CME 주말 갭)이 **Gate.io 의 BTC/ETH/SOL USDT 무기한**에 대해 낸 예측을, 봉이 닫힐 때 한 행씩 덧붙이고 그 뒤로는
