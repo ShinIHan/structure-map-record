@@ -65,7 +65,7 @@
       "quarantined_at"
     ]
   },
-  "date_utc": "2026-11-21",
+  "date_utc": "2026-11-22",
   "files": {
     "chart_log_2026-10.jsonl": {
       "bytes": 1669116,
@@ -73,9 +73,9 @@
       "sha256": "28aa2e234636d34b948ad9535baaf2c96a531e030c8be4eb4e5671ce23c81774"
     },
     "chart_log_2026-11.jsonl": {
-      "bytes": 5250409,
-      "rows": 2795,
-      "sha256": "965b5e86a6e376d87c6c17f8d5e44de581ac5c3272c177495b46378da1c1d48a"
+      "bytes": 5375610,
+      "rows": 2868,
+      "sha256": "3a68be6e2d50b8b124e6dbb7bdc23b91f5bd169100411d70ac505b74c18c9aa3"
     },
     "meta.json": {
       "bytes": 2222,
@@ -93,9 +93,9 @@
       "sha256": "39d2527a1e34a4628966fcfc47a9ca838e2f821b5bbc5af066272f40aa72c751"
     },
     "wave_log_2026-11.jsonl": {
-      "bytes": 7733763,
-      "rows": 1920,
-      "sha256": "f1c8a3767498ee6a03d8a10cb95d617ed2f89c769184626d533562d440a13bf0"
+      "bytes": 8108273,
+      "rows": 2013,
+      "sha256": "78ceb09528d73cde91816257dbd304f3fbc0e0a2b0a40a911d38acebeea3a712"
     },
     "wave_log_quarantine.jsonl": {
       "bytes": 8560,
@@ -107,28 +107,28 @@
     "chart_log": 0,
     "wave_log": 0
   },
-  "generated_at_utc": "2026-11-21T14:50:01Z",
+  "generated_at_utc": "2026-11-22T14:50:01Z",
   "late_rows": {
     "chart_log": 0,
     "wave_log": 0
   },
   "late_threshold_s": 300,
   "max_id": {
-    "chart_log": 105844,
-    "wave_log": 2755,
+    "chart_log": 110069,
+    "wave_log": 2848,
     "wave_log_quarantine": 11
   },
   "new_rows": {
-    "chart_log": 176,
+    "chart_log": 73,
     "wave_log": 93,
     "wave_log_quarantine": 0
   },
-  "prev_generated_at_utc": "2026-11-20T14:50:01Z",
-  "prev_manifest_sha256": "2770916e5416604efbb3a71868f7096d47bbe120844f1b76ccdc0bd6f85aa0a1",
+  "prev_generated_at_utc": "2026-11-21T14:50:01Z",
+  "prev_manifest_sha256": "d6728b624d1d151202d110b2dda9905b503830cbe7d68dcd2054d901d75e5a23",
   "row_counts": {
-    "chart_log": 3638,
+    "chart_log": 3711,
     "meta": 26,
-    "wave_log": 2630,
+    "wave_log": 2723,
     "wave_log_quarantine": 11
   },
   "schema": 1,
